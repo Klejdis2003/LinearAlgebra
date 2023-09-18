@@ -1,3 +1,5 @@
+package Matrices;
+
 import java.util.Arrays;
 
 /**
@@ -6,11 +8,28 @@ import java.util.Arrays;
 public class Matrix {
     private int[][] matrix;
     private int rows, columns;
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+    protected int[][] getMatrix() {
+        return matrix;
+    }
+
+
     public Matrix(int[][] matrix) {
         this.matrix =  matrix;
         this.rows = matrix.length;
         this.columns = matrix[0].length;
     }
+
+    /**
+     * @return The 2d array that the Matrices.Matrix object is built upon.
+     */
 
     public void addRow(int[] row){
         int[][] oldMatrix = this.matrix;

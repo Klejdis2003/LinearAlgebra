@@ -1,8 +1,10 @@
+package Matrices;
+
 public abstract class Matrices {
     /**
      * @param matrix1 an integer 2d array, int[][]
      * @param matrix2 an integer 2d array, int[][]
-     * @return        a new Matrix built from 2d array that contains the sum of the two matrices.
+     * @return        a new Matrices.Matrix built from 2d array that contains the sum of the two matrices.
      */
     public static Matrix add(int[][] matrix1, int[][] matrix2){
         if (matrix1.length == matrix2.length && matrix1[0].length == matrix2[0].length){
@@ -18,5 +20,11 @@ public abstract class Matrices {
         }
         return new Matrix(new int[0][0]);
     }
+    public static Matrix add(Matrix matrix1, Matrix matrix2){
+        int [][] m1 = matrix1.getMatrix();
+        int[][] m2 = matrix2.getMatrix();
+        return add(m1, m2);
+    }
+
 
 }

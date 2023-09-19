@@ -8,6 +8,11 @@ public class Main {
       Matrix M1 = new Matrix(m1);
       Matrix M2 = new Matrix(m2);
       System.out.println(Matrices.add(M1, M2));
+      System.out.println(Matrices.subtract(M1,M2));
+        System.out.println(M1);
+        M1.coefficientMultiply(2);
+        System.out.println(M1);
+
 //        ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(1, 2, 3));
 //        System.out.println(Matrices.Matrices.add(m1, m2));
 //        int [][] arr2d = {{1, 3, 4}};

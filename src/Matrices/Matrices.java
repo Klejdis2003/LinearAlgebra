@@ -25,6 +25,20 @@ public abstract class Matrices {
         int[][] m2 = matrix2.getMatrix();
         return add(m1, m2);
     }
+    public static Matrix subtract(int[][] matrix1, int[][] matrix2){
+        Matrix m1 = new Matrix(matrix1);
+        Matrix m2 = new Matrix(matrix2);
+        m2.coefficientMultiply(-1);
+        return add(m1, m2);
+
+    }
+    public static Matrix subtract(Matrix matrix1, Matrix matrix2){
+        matrix2.coefficientMultiply(-1);
+        return add(matrix1, matrix2);
+    }
+
+
+
 
 
 }

@@ -16,6 +16,11 @@ public class Matrix {
     public int getColumns() {
         return columns;
     }
+
+    /**
+     *
+     * @return The 2d array that the Matrix object is built upon.
+     */
     protected int[][] getMatrix() {
         return matrix;
     }
@@ -27,9 +32,7 @@ public class Matrix {
         this.columns = matrix[0].length;
     }
 
-    /**
-     * @return The 2d array that the Matrices.Matrix object is built upon.
-     */
+
 
     public void addRow(int[] row){
         int[][] oldMatrix = this.matrix;
@@ -39,6 +42,19 @@ public class Matrix {
             this.matrix[i] = oldMatrix[i];
         }
         this.matrix[rows-1] = row;
+    }
+
+    /**
+     * @param coefficient
+     *        int type.
+     *        Multiplies every element of the matrix by that number.
+     */
+    public void coefficientMultiply(int coefficient){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns ; j++) {
+                matrix[i][j] *= coefficient;
+            }
+        }
     }
 
     @Override

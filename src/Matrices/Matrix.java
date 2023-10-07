@@ -7,9 +7,9 @@ import java.util.HashMap;
  Provides basic functions to do operations on matrices such as adding, subtracting, multiplying, row echelon, reduced row echelon.
  */
 public class Matrix {
-    private Integer[][] matrix;
+    private Float[][] matrix;
     private int rows, columns;
-    private HashMap<Integer, Integer[]> columnMap; //will help with fast access to columns during matrix multiplication.
+    private HashMap<Integer, Float[]> columnMap; //will help with fast access to columns during matrix multiplication.
 
     public int getRows() {
         return rows;
@@ -23,11 +23,11 @@ public class Matrix {
      *
      * @return The 2d array that the Matrix object is built upon.
      */
-    protected Integer[][] getMatrix() {
+    protected Float[][] getMatrix() {
         return matrix;
     }
 
-    public HashMap<Integer, Integer[]> getColumnMap() {
+    public HashMap<Integer, Float[]> getColumnMap() {
         return columnMap;
     }
 
@@ -35,7 +35,7 @@ public class Matrix {
      * @param matrix a 2d array of integers
      * Builds a Matrix object from the given array.
      */
-    public Matrix(Integer[][] matrix) {
+    public Matrix(Float[][] matrix) {
         this.matrix =  matrix;
         this.rows = matrix.length;
         this.columns = matrix[0].length;
@@ -51,17 +51,17 @@ public class Matrix {
 
         this.rows = rows;
         this.columns = columns;
-        this.matrix = new Integer[rows][columns];
+        this.matrix = new Float[rows][columns];
     }
 
     /**
      * Updates the HashMap that keeps tracks of the columns of the Matrix instance.
      */
     private void updateColumnMap(){
-        this.columnMap = new HashMap<>();
-        Integer[] currColumn;
+        this.columnMap = new HashMap<Integer, Float[]>();
+        Float[] currColumn;
         for (int i = 0; i < this.columns; i++) {
-            currColumn = new Integer[this.rows];
+            currColumn = new Float[this.rows];
             for (int j = 0; j < this.rows ; j++) {
                 currColumn[j] = matrix[j][i];
             }
@@ -82,11 +82,11 @@ public class Matrix {
      * @throws IncorrectRowSizeException when the size of the row to be added is different from
      *         the size of the rows of the Matrix instance.
      */
-    public void addRow(Integer[] row) throws IncorrectRowSizeException {
+    public void addRow(Float[] row) throws IncorrectRowSizeException {
         if(row.length != columns) throw new IncorrectRowSizeException();
-        Integer[][] oldMatrix = this.matrix;
+        Float[][] oldMatrix = this.matrix;
         this.rows++;
-        this.matrix = new Integer[this.rows][this.columns];
+        this.matrix = new Float[this.rows][this.columns];
         System.arraycopy(oldMatrix, 0, this.matrix, 0, oldMatrix.length);
         this.matrix[rows-1] = row;
         updateColumnMap();
@@ -115,27 +115,23 @@ public class Matrix {
     }
 
     /**
-     * <pre>
-     * Performs gauss-jordan elimination method to compute a row echelon form of the Matrix instance.
      *
-     * Current limitations: Rounding errors because as of now I have only provided methods for integer
-     * matrices. Some row reduction operations cannot be performed without usage of floats/fractions, so those
-     * position contain numbers that are not exactly right. Will be fixed in the next iteration.
-     * </pre>
-     * @return a new matrix that is in row echelon form
+     * Performs gauss-jordan elimination method to compute a row echelon form of the Matrix instance.
+     * @return a new matrix that is in row echelon form.
+     * @author Klejdis Beshi
      */
     public Matrix getRowEchelon(){
 
         Matrix refMatrix = new Matrix(this.matrix);
-        int pivot;
+        Float pivot;
         for(int i = 1; i < this.rows; i++){
             for(int j = 0; j < i && j < this.columns; j++){
                 Row row = new Row();
                 pivot = matrix[i][j];
                 if(pivot == 0) continue;
                 float coef = (float) pivot /matrix[j][j];
-                Integer[] transformedTargetRow = row.multiply(j, coef);
-                Integer[] transformedRow = row.subtract(matrix[i], transformedTargetRow);
+                Float[] transformedTargetRow = row.multiply(j, coef);
+                Float[] transformedRow = row.subtract(matrix[i], transformedTargetRow);
 
                 refMatrix.matrix[i] = transformedRow;
             }
@@ -148,7 +144,11 @@ public class Matrix {
        StringBuilder matrixToString = new StringBuilder();
         for (int i = 0; i < this.rows; i++) {
             for (int j = 0; j < this.columns; j++) {
-                matrixToString.append(String.format("%d ", matrix[i][j]));
+                if (matrix[i][j] == (int)((float) matrix[i][j]))
+                    matrixToString.append(String.format("%d ", (int)((float)matrix[i][j])));
+                else {
+                    matrixToString.append(String.format("%.2f ", Math.round(matrix[i][j]*100)/100f));
+                }
             }
             matrixToString.append("\n");
         }
@@ -161,15 +161,15 @@ public class Matrix {
      * a method to subtract a row from another row.
      */
     private class Row{
-        Integer[] multiply(int rowIndex, float constant){
-            Integer[] row = Arrays.copyOf(matrix[rowIndex], matrix[rowIndex].length);
+        Float[] multiply(int rowIndex, float constant){
+            Float[] row = Arrays.copyOf(matrix[rowIndex], matrix[rowIndex].length);
             for (int i = 0; i < row.length; i++) {
-                row[i] = (int)(row[i] * constant);
+                row[i] = (row[i] * constant);
             }
             return row;
         }
-        Integer[] subtract(Integer[] row1, Integer[] row2){
-            Integer[] newRow = new Integer[row1.length];
+        Float[] subtract(Float[] row1, Float[] row2){
+            Float[] newRow = new Float[row1.length];
             for (int i = 0; i < newRow.length; i++) {
                 newRow[i] = row1[i] - row2[i];
             }

@@ -9,10 +9,11 @@ public abstract class Vectors {
      * @param v2 an Integer array.
      * @return an integer, the dot product of v1 and v2.
      * @throws Exception, if v1 and v2 have different sizes.
+     * @author Klejdis Beshi
      */
-    public static int dotProduct(Integer[] v1, Integer[] v2) throws Exception {
+    public static Float dotProduct(Float[] v1, Float[] v2) throws Exception {
         if(v1.length != v2.length) throw new Exception("Vector sizes do not match");
-        int dotProduct = 0;
+        Float dotProduct = 0F;
         for (int i = 0; i < v1.length; i++) {
             dotProduct += v1[i] * v2[i];
         }

@@ -2,24 +2,10 @@ import Matrices.Matrices;
 import Matrices.Matrix;
 
 public class Main {
-    public static void main(String[] args){
-      int m1[][] = {{1,2,3}, {2,3,5}};
-      int m2[][] = {{1,8,3}, {7,1,5}};
-      Matrix M1 = new Matrix(m1);
-      Matrix M2 = new Matrix(m2);
-      System.out.println(Matrices.add(M1, M2));
-      System.out.println(Matrices.subtract(M1,M2));
-        System.out.println(M1);
-        M1.coefficientMultiply(2);
-        System.out.println(M1);
-
-//        ArrayList<Integer> arr = new ArrayList<>(Arrays.asList(1, 2, 3));
-//        System.out.println(Matrices.Matrices.add(m1, m2));
-//        int [][] arr2d = {{1, 3, 4}};
-//        Matrices.Matrix m3 = new Matrices.Matrix(arr2d);
-//        m3.addRow(arr2d[0]);
-//        System.out.println(m3);
-
-
+    public static void main(String[] args) throws Exception {
+        Matrix m1 = new Matrix(new int[][]{{1,2, 5}, {2,34, 3}, {3, 5, 1}});
+        m1.addRow(new int[]{1, 2});
+        System.out.println(m1);
+        System.out.println(m1.getRowEchelon());
     }
 }

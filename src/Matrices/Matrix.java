@@ -73,6 +73,12 @@ public class Matrix {
             System.out.printf("%d = %s\n", key, Arrays.toString(columnMap.get(key)));
         }
     }
+    private void swapRows(int r1Index, int r2Index){
+        Float[] firstRow = matrix[r1Index];
+        matrix[r1Index] = matrix[(r1Index + 1) % rows];
+        matrix[(r1Index + 1) % rows] = firstRow;
+
+    }
 
     /**
      * @param rowIndex The index of the row.
@@ -146,19 +152,16 @@ public class Matrix {
         Matrix refMatrix = copy();
         Float[][] matrix = refMatrix.matrix;
         Float pivot;
-        float firstPivot = 0;
 
-        //Before we do anything, we should check if the first row contains 0 only
+        //Before we do anything, we should check if the first pivot is equal to 0.
         //If it does, we swap rows until the element at position 0,0 is not 0.
         while(matrix[0][0] == 0) {
             for (int i = 0; i < rows - 1 && matrix[rows - 1][0] != 0; i++) {
-                Float[] firstRow = matrix[i];
-                matrix[i] = matrix[(i + 1) % rows];
-                matrix[(i + 1) % rows] = firstRow;
+                swapRows(i, i+1);
             }
         }
-        System.out.println(refMatrix);
 
+        //This is where Gaussian elimination begins
         for(int i = 1; i < refMatrix.rows; i++){
             for(int j = 0; j < i && j < refMatrix.columns; j++){
                 Row row = new Row();

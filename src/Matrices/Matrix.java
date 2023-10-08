@@ -68,12 +68,34 @@ public class Matrix {
             columnMap.put(i, currColumn);
         }
     }
-    public void printColumnMap(){
+    private void printColumnMap(){
         for(Integer key: columnMap.keySet()){
             System.out.printf("%d = %s\n", key, Arrays.toString(columnMap.get(key)));
         }
     }
 
+    /**
+     * @param rowIndex The index of the row.
+     * @param columnIndex The index of the column.
+     * @return The number that is contained at position (rowIndex, columnIndex) in the Matrix instance.
+     */
+    public Float get(int rowIndex, int columnIndex){
+        return matrix[rowIndex][columnIndex];
+    }
+
+    /**
+     * Sets the position (rowIndex, columnInedex) in the
+     * Matrix instance to the passed number.
+     * @param rowIndex The index of the row.
+     * @param columnIndex The index of the column.
+     * @param number A floating point number.
+     */
+    public void set(int rowIndex, int columnIndex, Float number){
+        matrix[rowIndex][columnIndex] = number;
+    }
+    public Matrix copy(){
+        return new Matrix(this.matrix);
+    }
     /**
      * Changes the current Matrix instance by adding a new row. Fails if the new row
      * is not compatible with the current rows.
@@ -121,19 +143,32 @@ public class Matrix {
      * @author Klejdis Beshi
      */
     public Matrix getRowEchelon(){
-
-        Matrix refMatrix = new Matrix(this.matrix);
+        Matrix refMatrix = copy();
+        Float[][] matrix = refMatrix.matrix;
         Float pivot;
-        for(int i = 1; i < this.rows; i++){
-            for(int j = 0; j < i && j < this.columns; j++){
+        float firstPivot = 0;
+
+        //Before we do anything, we should check if the first row contains 0 only
+        //If it does, we swap rows until the element at position 0,0 is not 0.
+        while(matrix[0][0] == 0) {
+            for (int i = 0; i < rows - 1 && matrix[rows - 1][0] != 0; i++) {
+                Float[] firstRow = matrix[i];
+                matrix[i] = matrix[(i + 1) % rows];
+                matrix[(i + 1) % rows] = firstRow;
+            }
+        }
+        System.out.println(refMatrix);
+
+        for(int i = 1; i < refMatrix.rows; i++){
+            for(int j = 0; j < i && j < refMatrix.columns; j++){
                 Row row = new Row();
                 pivot = matrix[i][j];
                 if(pivot == 0) continue;
-                float coef = (float) pivot /matrix[j][j];
-                Float[] transformedTargetRow = row.multiply(j, coef);
+                float coefficient = pivot /matrix[j][j];
+                Float[] transformedTargetRow = row.multiply(j, coefficient);
                 Float[] transformedRow = row.subtract(matrix[i], transformedTargetRow);
 
-                refMatrix.matrix[i] = transformedRow;
+                matrix[i] = transformedRow;
             }
         }
         return refMatrix;
@@ -143,12 +178,14 @@ public class Matrix {
     public String toString() {
        StringBuilder matrixToString = new StringBuilder();
         for (int i = 0; i < this.rows; i++) {
+
             for (int j = 0; j < this.columns; j++) {
                 if (matrix[i][j] == (int)((float) matrix[i][j]))
-                    matrixToString.append(String.format("%d ", (int)((float)matrix[i][j])));
+                    matrixToString.append(String.format("%12d ", (int)((float)matrix[i][j])));
                 else {
-                    matrixToString.append(String.format("%.2f ", Math.round(matrix[i][j]*100)/100f));
+                    matrixToString.append(String.format("%12.2f ", Math.round(matrix[i][j]*100)/100f));
                 }
+
             }
             matrixToString.append("\n");
         }

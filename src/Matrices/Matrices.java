@@ -62,7 +62,7 @@ public abstract class Matrices {
     public static Matrix subtract(Double[][] matrix1, Double[][] matrix2) {
         Matrix m1 = new Matrix(matrix1);
         Matrix m2 = new Matrix(matrix2);
-        m2.coefficientMultiply(-1);
+        m2.coefficientMultiply(-1d);
         return add(m1, m2);
 
     }
@@ -73,7 +73,7 @@ public abstract class Matrices {
      * @return a new Matrix instance where the i,j position is equal to matrix1[i][j] - matrix2[i][j].
      */
     public static Matrix subtract(Matrix matrix1, Matrix matrix2) {
-        matrix2.coefficientMultiply(-1);
+        matrix2.coefficientMultiply(-1d);
         return add(matrix1, matrix2);
     }
 

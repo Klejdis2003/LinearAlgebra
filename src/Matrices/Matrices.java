@@ -88,8 +88,8 @@ public abstract class Matrices {
         if (matrix1.getColumns() != matrix2.getRows()) throw new Exception("Incompatible Matrices.");
 
         Double[][] m3 = new Double[matrix1.getRows()][matrix2.getColumns()];
-        for (int i = 0; i < matrix1.getRows(); i++) {
-            for (int j = 0; j < matrix1.getColumns(); j++) {
+        for (int i = 0; i < m3.length; i++) {
+            for (int j = 0; j < m3[0].length; j++) {
                 m3[i][j] = dotProduct(matrix1.getMatrix()[i], matrix2.getColumnMap().get(j));
             }
         }

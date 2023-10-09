@@ -103,7 +103,7 @@ public class Main {
         }while(running);
 
         m = new Matrix(rows, columns);
-        System.out.println("Enter matrix 1 row by row as (a1 a2 a3 ... an):");
+        System.out.printf("Enter matrix %d row by row as (a1 a2 a3 ... an):\n", n);
         for (int i = 0; i < m.getRows(); i++) {
             do {
                 try {

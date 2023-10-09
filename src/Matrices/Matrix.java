@@ -1,15 +1,19 @@
 package Matrices;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Vector;
 
 /**
  Provides basic functions to do operations on matrices such as adding, subtracting, multiplying, row echelon, reduced row echelon.
+ @author Klejdis Beshi
  */
 public class Matrix {
-    private Float[][] matrix;
+    private Double[][] matrix;
     private int rows, columns;
-    private HashMap<Integer, Float[]> columnMap; //will help with fast access to columns during matrix multiplication.
+    private HashMap<Integer, ArrayList<Double>> columnMap; //will help with fast access to columns during matrix multiplication.
+
 
     public int getRows() {
         return rows;
@@ -23,23 +27,23 @@ public class Matrix {
      *
      * @return The 2d array that the Matrix object is built upon.
      */
-    protected Float[][] getMatrix() {
+    protected Double[][] getMatrix() {
         return matrix;
     }
 
-    public HashMap<Integer, Float[]> getColumnMap() {
+    public HashMap<Integer, ArrayList<Double>> getColumnMap() {
         return columnMap;
     }
 
     /**
-     * @param matrix a 2d array of integers
+     * @param matrix a 2d array of type Double.
      * Builds a Matrix object from the given array.
      */
-    public Matrix(Float[][] matrix) {
-        this.matrix =  matrix;
+    public Matrix(Double[][] matrix) {
         this.rows = matrix.length;
         this.columns = matrix[0].length;
-        updateColumnMap();
+        this.matrix = new Double[rows][columns];
+        updateMatrix(matrix);
     }
 
     /**
@@ -51,33 +55,54 @@ public class Matrix {
 
         this.rows = rows;
         this.columns = columns;
-        this.matrix = new Float[rows][columns];
+        this.matrix = new Double[rows][columns];
     }
 
     /**
-     * Updates the HashMap that keeps tracks of the columns of the Matrix instance.
+     * Updates the matrix with the values of the passed 2-dimensional array.
+     * @param m a 2-dimensional array of type Double, Double[][].
      */
-    private void updateColumnMap(){
-        this.columnMap = new HashMap<Integer, Float[]>();
-        Float[] currColumn;
-        for (int i = 0; i < this.columns; i++) {
-            currColumn = new Float[this.rows];
-            for (int j = 0; j < this.rows ; j++) {
-                currColumn[j] = matrix[j][i];
+    private void updateMatrix(Double[][] m){
+        this.columnMap = new HashMap<>();
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.columns ; j++) {
+                if(!columnMap.containsKey(j))
+                    columnMap.put(j, new ArrayList<>());
+                matrix[i][j] = m[i][j];
+                columnMap.get(j).add(matrix[i][j]);
             }
-            columnMap.put(i, currColumn);
         }
     }
-    private void printColumnMap(){
-        for(Integer key: columnMap.keySet()){
-            System.out.printf("%d = %s\n", key, Arrays.toString(columnMap.get(key)));
-        }
-    }
-    private void swapRows(int r1Index, int r2Index){
-        Float[] firstRow = matrix[r1Index];
-        matrix[r1Index] = matrix[(r1Index + 1) % rows];
-        matrix[(r1Index + 1) % rows] = firstRow;
 
+    /**
+     * It updates the HashMap that keeps track of the Matrix
+     * instance to account for the newly added row.
+     * @param newRow An array of type Double, represents
+     *               the row that was added.
+     */
+    private void updateColumnMap(Double[] newRow){
+        for (int i = 0; i < newRow.length ; i++) {
+            columnMap.get(i).add(newRow[i]);
+        }
+
+    }
+    public void printColumnMap(){
+        for(Integer key: columnMap.keySet()){
+            System.out.printf("%d = %s\n", key, columnMap.get(key));
+        }
+    }
+
+    /**
+     * Swaps two rows of the matrix. Useful for
+     * gauss transformations to reduce to row
+     * echelon form.
+     * @param r1Index the index of the first row.
+     * @param r2Index the index of the second row.
+     */
+    private void swapRows(int r1Index, int r2Index){
+        Double[] firstRow = matrix[r1Index];
+        matrix[r1Index] = matrix[r2Index];
+        matrix[r2Index] = firstRow;
     }
 
     /**
@@ -85,92 +110,92 @@ public class Matrix {
      * @param columnIndex The index of the column.
      * @return The number that is contained at position (rowIndex, columnIndex) in the Matrix instance.
      */
-    public Float get(int rowIndex, int columnIndex){
+    public Double get(int rowIndex, int columnIndex){
         return matrix[rowIndex][columnIndex];
     }
 
     /**
-     * Sets the position (rowIndex, columnInedex) in the
+     * Sets the position (rowIndex, columnIndex) in the
      * Matrix instance to the passed number.
      * @param rowIndex The index of the row.
      * @param columnIndex The index of the column.
-     * @param number A floating point number.
+     * @param number A number of type Double.
      */
-    public void set(int rowIndex, int columnIndex, Float number){
+    public void set(int rowIndex, int columnIndex, Double number){
         matrix[rowIndex][columnIndex] = number;
     }
+
+    /**
+     * @return A new Matrix object that is equal to the current instance.
+     */
     public Matrix copy(){
         return new Matrix(this.matrix);
     }
     /**
      * Changes the current Matrix instance by adding a new row. Fails if the new row
      * is not compatible with the current rows.
-     * @param row an integer array that matches in size with the number of columns of the
-     *            Matrix instance.
+     * @param row an array of type Double that matches in size with the number of
+     *            columns of the Matrix instance.
      * @throws IncorrectRowSizeException when the size of the row to be added is different from
      *         the size of the rows of the Matrix instance.
      */
-    public void addRow(Float[] row) throws IncorrectRowSizeException {
+    public void addRow(Double[] row) throws IncorrectRowSizeException {
         if(row.length != columns) throw new IncorrectRowSizeException();
-        Float[][] oldMatrix = this.matrix;
+        Double[][] oldMatrix = this.matrix;
         this.rows++;
-        this.matrix = new Float[this.rows][this.columns];
+        this.matrix = new Double[this.rows][this.columns];
         System.arraycopy(oldMatrix, 0, this.matrix, 0, oldMatrix.length);
         this.matrix[rows-1] = row;
-        updateColumnMap();
+        updateColumnMap(row);
     }
     
     /**
      *
      *
      * Multiplies every element of a row of the Matrix instance by the passed number.
-     * @param coefficient an integer, the coefficient to multiply the row by.
+     * @param coefficient a number of type Double, the coefficient to multiply the row by.
      * @param rowIndex an integer, specifies the row that is going to be transformed.
      */
-    private void rowCoefficientMultiply(int coefficient, int rowIndex){
-        Row row = new Row();
-        matrix[rowIndex] = row.multiply(rowIndex, coefficient);
+    private void rowCoefficientMultiply(Double coefficient, int rowIndex){
+        matrix[rowIndex] = Row.multiply(matrix[rowIndex], coefficient);
     }
 
     /**
      * Multiplies every element of the Matrix instance by the passed coefficient.
-     * @param coefficient an integer.
+     * @param coefficient a number of type Double.
      */
-    public void coefficientMultiply(int coefficient){
+    public void coefficientMultiply(Double coefficient){
         for (int i = 0; i < rows; i++) {
             rowCoefficientMultiply(coefficient, i);
         }
     }
 
     /**
-     *
      * Performs gauss-jordan elimination method to compute a row echelon form of the Matrix instance.
      * @return a new matrix that is in row echelon form.
      * @author Klejdis Beshi
      */
     public Matrix getRowEchelon(){
         Matrix refMatrix = copy();
-        Float[][] matrix = refMatrix.matrix;
-        Float pivot;
+        Double[][] matrix = refMatrix.matrix;
+        Double pivot;
 
         //Before we do anything, we should check if the first pivot is equal to 0.
         //If it does, we swap rows until the element at position 0,0 is not 0.
         while(matrix[0][0] == 0) {
             for (int i = 0; i < rows - 1 && matrix[rows - 1][0] != 0; i++) {
-                swapRows(i, i+1);
+                refMatrix.swapRows(i, i+1);
             }
         }
 
         //This is where Gaussian elimination begins
         for(int i = 1; i < refMatrix.rows; i++){
             for(int j = 0; j < i && j < refMatrix.columns; j++){
-                Row row = new Row();
                 pivot = matrix[i][j];
                 if(pivot == 0) continue;
-                float coefficient = pivot /matrix[j][j];
-                Float[] transformedTargetRow = row.multiply(j, coefficient);
-                Float[] transformedRow = row.subtract(matrix[i], transformedTargetRow);
-
+                double coefficient = pivot /matrix[j][j];
+                Double[] transformedTargetRow = Row.multiply(matrix[j], coefficient);
+                Double[] transformedRow = Row.subtract(matrix[i], transformedTargetRow);
                 matrix[i] = transformedRow;
             }
         }
@@ -183,8 +208,8 @@ public class Matrix {
         for (int i = 0; i < this.rows; i++) {
 
             for (int j = 0; j < this.columns; j++) {
-                if (matrix[i][j] == (int)((float) matrix[i][j]))
-                    matrixToString.append(String.format("%12d ", (int)((float)matrix[i][j])));
+                if (matrix[i][j] == (int)((double) matrix[i][j]))
+                    matrixToString.append(String.format("%12d ", (int)((double)matrix[i][j])));
                 else {
                     matrixToString.append(String.format("%12.2f ", Math.round(matrix[i][j]*100)/100f));
                 }
@@ -200,16 +225,16 @@ public class Matrix {
      * It involves methods of multiplying a Row(array) with a constant and
      * a method to subtract a row from another row.
      */
-    private class Row{
-        Float[] multiply(int rowIndex, float constant){
-            Float[] row = Arrays.copyOf(matrix[rowIndex], matrix[rowIndex].length);
-            for (int i = 0; i < row.length; i++) {
-                row[i] = (row[i] * constant);
+    private  static class Row{
+        static Double[] multiply(Double[] row, double constant){
+            Double[] transformedRow = Arrays.copyOf(row, row.length);
+            for (int i = 0; i < transformedRow.length; i++) {
+                transformedRow[i] = (transformedRow[i] * constant);
             }
-            return row;
+            return transformedRow;
         }
-        Float[] subtract(Float[] row1, Float[] row2){
-            Float[] newRow = new Float[row1.length];
+        static Double[] subtract(Double[] row1, Double[] row2){
+            Double[] newRow = new Double[row1.length];
             for (int i = 0; i < newRow.length; i++) {
                 newRow[i] = row1[i] - row2[i];
             }

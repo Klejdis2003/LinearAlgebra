@@ -28,7 +28,7 @@ public abstract class Matrices {
      * @param matrix2 an integer 2d array.
      * @return a new Matrix instance built from 2d array that contains the sum of the two-dimensional arrays.
      */
-    public static Matrix add(Double[][] matrix1, Double[][] matrix2) {
+    public static Matrix add(Double[][] matrix1, Double[][] matrix2) throws Exception {
         if (matrix1.length == matrix2.length && matrix1[0].length == matrix2[0].length) {
             int rows = matrix1.length;
             int columns = matrix1[0].length;
@@ -40,7 +40,7 @@ public abstract class Matrices {
             }
             return new Matrix(sumMatrix);
         }
-        return new Matrix(new Double[0][0]);
+        throw new Exception("Addition cannot be performed. Matrix sizes are different.");
     }
 
     /**
@@ -48,7 +48,7 @@ public abstract class Matrices {
      * @param matrix2 a Matrix instance.
      * @return a new Matrix instance that is equal to matrix1 + matrix2.
      */
-    public static Matrix add(Matrix matrix1, Matrix matrix2) {
+    public static Matrix add(Matrix matrix1, Matrix matrix2) throws Exception {
         Double[][] m1 = matrix1.getMatrix();
         Double[][] m2 = matrix2.getMatrix();
         return add(m1, m2);
@@ -59,7 +59,7 @@ public abstract class Matrices {
      * @param matrix2 an integer 2d array.
      * @return a new Matrix instance where the i,j position is equal to matrix1[i][j] - matrix2[i][j].
      */
-    public static Matrix subtract(Double[][] matrix1, Double[][] matrix2) {
+    public static Matrix subtract(Double[][] matrix1, Double[][] matrix2) throws Exception {
         Matrix m1 = new Matrix(matrix1);
         Matrix m2 = new Matrix(matrix2);
         m2.coefficientMultiply(-1d);
@@ -72,7 +72,7 @@ public abstract class Matrices {
      * @param matrix2 a Matrix instance.
      * @return a new Matrix instance where the i,j position is equal to matrix1[i][j] - matrix2[i][j].
      */
-    public static Matrix subtract(Matrix matrix1, Matrix matrix2) {
+    public static Matrix subtract(Matrix matrix1, Matrix matrix2) throws Exception {
         matrix2.coefficientMultiply(-1d);
         return add(matrix1, matrix2);
     }

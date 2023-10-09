@@ -56,6 +56,7 @@ public class Matrix {
         this.rows = rows;
         this.columns = columns;
         this.matrix = new Double[rows][columns];
+        this.columnMap = new HashMap<>();
     }
 
     /**
@@ -123,6 +124,8 @@ public class Matrix {
      */
     public void set(int rowIndex, int columnIndex, Double number){
         matrix[rowIndex][columnIndex] = number;
+        //columnMap.get(columnIndex).set(rowIndex, number);
+        updateMatrix(matrix);
     }
 
     /**
@@ -199,7 +202,20 @@ public class Matrix {
                 matrix[i] = transformedRow;
             }
         }
+        refMatrix.updateMatrix(matrix);
         return refMatrix;
+    }
+
+    @Override
+    public boolean equals(Object matrix) {
+
+        if(this == matrix)
+            return true;
+        else if(!(matrix instanceof Matrix)){
+            return false;
+        }
+        Matrix m = (Matrix) matrix;
+        return Arrays.deepEquals(this.matrix, m.matrix);
     }
 
     @Override

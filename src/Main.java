@@ -1,21 +1,129 @@
 import Matrices.Matrices;
 import Matrices.Matrix;
 
-import java.util.ArrayList;
+import java.util.*;
+
 
 public class Main {
-    public static void main(String[] args) throws Exception{
-        Double[][] m = {{0d,0d,0d}, {131d,2d, 5d}, {24d,34d, 3d}, {35d, 53d, 13d}};
-        Matrix m1 = new Matrix(m);
-        Matrix m2 = new Matrix(new Double[][]{{1d,2d, 5d}, {2d,34d, 3d}, {11d, 5d, 1d}});
-        //System.out.println(Matrices.multiply(m1, m2));
-        //System.out.println(m1);
-        m[0][0] = 324d;
-        m1.addRow(new Double[] {2d, 3d, 0d});
-        System.out.println(m1.getRowEchelon());
-        //System.out.println(Matrices.multiply(m1, m2));
-        //m1.printColumnMap();
-        //m1.printColumnMap();
 
+    public static void main(String[] args){
+        int operation;
+        do {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Matrix operations app");
+            System.out.print(
+                            "0: Add two matrices\n" +
+                            "1: Subtract two matrices\n" +
+                            "2: Multiply two matrices\n" +
+                            "3: Find a row echelon form of a matrix\n" +
+                            "4: Terminate Program\n" +
+                            "Enter the operation you want to perform: "
+            );
+            operation = scanner.nextInt();
+            Matrix m1, m2;
+            switch (operation) {
+                case 0:
+                    m1 = getMatrixInput(1);
+                    m2 = getMatrixInput(2);
+                    try {
+                        System.out.println(Matrices.add(m1, m2));
+                    }
+                    catch (Exception e) {
+                        System.out.println("The sizes of the two matrices do not match." +
+                                "Addition cannot be performed.");
+                    }
+                    break;
+                case 1:
+                    m1 = getMatrixInput(1);
+                    m2 = getMatrixInput(2);
+
+                    try{
+                        System.out.println(Matrices.subtract(m1, m2));
+                    }
+                    catch (Exception e){
+                        System.out.println("The sizes of the two matrices do not match." +
+                                "Subtraction cannot be performed.");
+                    }
+                    break;
+                case 2:
+                    m1 = getMatrixInput(1);
+                    m2 = getMatrixInput(2);
+
+                    try{
+                        System.out.println(Matrices.multiply(m1, m2));
+                    }
+                    catch (Exception e){
+                        System.out.println("First matrix column number" +
+                                           "does not match with second" +
+                                           "matrix row number. " +
+                                           "Multiplication cannot be" +
+                                           "performed.");
+                    }
+                    break;
+                case 3:
+                    m1 = getMatrixInput(1);
+                    System.out.println(m1.getRowEchelon());
+                    break;
+                case 4:
+                    System.out.println("Exiting ...");
+                    continue;
+                default:
+                    System.out.print("Operation not supported.");
+                    break;
+            }
+            System.out.println("Type any character and press enter to use the app again.");
+            scanner.next();
+        }while(operation != 4);
+
+    }
+    public static Matrix getMatrixInput(int n) {
+        ArrayList<Matrix> matrices = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        Matrix m;
+        boolean running;
+        int rows = 0;
+        int columns = 0;
+        do{
+            try {
+                System.out.printf("Enter dimensions for matrix %d (rows, columns): ", n);
+                String[] dimensionsString = scanner.nextLine().
+                        replaceAll("\\s", "")
+                        .split(",");
+
+                rows = Integer.parseInt(dimensionsString[0]);
+                columns = Integer.parseInt(dimensionsString[1]);
+
+                running = false;
+            }
+            catch(Exception e){
+                System.out.println("Input in the wrong format. Try again");
+                scanner = new Scanner(System.in);
+                running = true;
+            }
+        }while(running);
+
+        m = new Matrix(rows, columns);
+        System.out.println("Enter matrix 1 row by row as (a1 a2 a3 ... an):");
+        for (int i = 0; i < m.getRows(); i++) {
+            do {
+                try {
+                    System.out.printf("Enter row %d: ", i + 1);
+                    for (int j = 0; j < m.getColumns(); j++) {
+                        m.set(i, j, scanner.nextDouble());
+                    }
+                    running = false;
+                } catch (Exception e) {
+                    System.out.println("Wrong input. " +
+                            "Remember that the format should be: " +
+                            "a1 a2 a3 ... an. Try again.");
+
+                    scanner = new Scanner(System.in);
+                    running = true;
+                }
+            }while(running);
+
+        }
+
+        return m;
     }
 }

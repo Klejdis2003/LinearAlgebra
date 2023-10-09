@@ -10,9 +10,9 @@ public class Main {
         int operation;
         do {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Matrix operations app");
             System.out.print(
                     """
+                            Matrix Operations App
                             0: Add two matrices
                             1: Subtract two matrices
                             2: Multiply two matrices

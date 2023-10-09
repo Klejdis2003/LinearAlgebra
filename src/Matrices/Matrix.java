@@ -3,8 +3,6 @@ package Matrices;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Vector;
-
 /**
  Provides basic functions to do operations on matrices such as adding, subtracting, multiplying, row echelon, reduced row echelon.
  @author Klejdis Beshi

@@ -12,12 +12,13 @@ public class Main {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Matrix operations app");
             System.out.print(
-                            "0: Add two matrices\n" +
-                            "1: Subtract two matrices\n" +
-                            "2: Multiply two matrices\n" +
-                            "3: Find a row echelon form of a matrix\n" +
-                            "4: Terminate Program\n" +
-                            "Enter the operation you want to perform: "
+                    """
+                            0: Add two matrices
+                            1: Subtract two matrices
+                            2: Multiply two matrices
+                            3: Find a row echelon form of a matrix
+                            4: Terminate Program
+                            Enter the operation you want to perform:\s"""
             );
             operation = scanner.nextInt();
             Matrix m1, m2;

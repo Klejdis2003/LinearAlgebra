@@ -225,9 +225,9 @@ public class Matrix {
 
             for (int j = 0; j < this.columns; j++) {
                 if (matrix[i][j] == (int)((double) matrix[i][j]))
-                    matrixToString.append(String.format("%12d ", (int)((double)matrix[i][j])));
+                    matrixToString.append(String.format("%10d ", (int)((double)matrix[i][j])));
                 else {
-                    matrixToString.append(String.format("%12.2f ", Math.round(matrix[i][j]*100)/100f));
+                    matrixToString.append(String.format("%10.2f ", Math.round(matrix[i][j]*100)/100f));
                 }
 
             }
@@ -255,6 +255,13 @@ public class Matrix {
                 newRow[i] = row1[i] - row2[i];
             }
             return newRow;
+        }
+        static boolean containsZeroesOnly(Double[] row){
+            for(double d : row){
+                if(d != 0)
+                    return false;
+            }
+            return true;
         }
     }
 }

@@ -26,7 +26,7 @@ public class Main {
                     m1 = getMatrixInput(1);
                     m2 = getMatrixInput(2);
                     try {
-                        System.out.println(Matrices.add(m1, m2));
+                        System.out.printf("%s + \n%s = \n%s\n", m1, m2, Matrices.add(m1, m2));
                     }
                     catch (Exception e) {
                         System.out.println("The sizes of the two matrices do not match." +
@@ -38,7 +38,7 @@ public class Main {
                     m2 = getMatrixInput(2);
 
                     try{
-                        System.out.println(Matrices.subtract(m1, m2));
+                        System.out.printf("%s - \n%s = \n%s\n", m1, m2, Matrices.subtract(m1, m2));
                     }
                     catch (Exception e){
                         System.out.println("The sizes of the two matrices do not match." +
@@ -50,11 +50,11 @@ public class Main {
                     m2 = getMatrixInput(2);
 
                     try{
-                        System.out.println(Matrices.multiply(m1, m2));
+                        System.out.printf("%s * \n%s = \n%s\n", m1, m2, Matrices.multiply(m1, m2));
                     }
                     catch (Exception e){
-                        System.out.println("First matrix column number" +
-                                           "does not match with second" +
+                        System.out.println("First matrix column number " +
+                                           "does not match with second " +
                                            "matrix row number. " +
                                            "Multiplication cannot be" +
                                            "performed.");
@@ -62,7 +62,7 @@ public class Main {
                     break;
                 case 3:
                     m1 = getMatrixInput(1);
-                    System.out.println(m1.getRowEchelon());
+                    System.out.printf("A row echelon form of\n %s is: \n%s", m1, m1.getRowEchelon());
                     break;
                 case 4:
                     System.out.println("Exiting ...");

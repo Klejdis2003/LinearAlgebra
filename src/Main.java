@@ -7,6 +7,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args){
+
         int operation;
         do {
             Scanner scanner = new Scanner(System.in);
@@ -17,7 +18,8 @@ public class Main {
                             1: Subtract two matrices
                             2: Multiply two matrices
                             3: Find a row echelon form of a matrix
-                            4: Terminate Program
+                            4: Transpose matrix
+                            5: Terminate Program
                             Enter the operation you want to perform:\s"""
             );
             operation = scanner.nextInt();
@@ -66,6 +68,10 @@ public class Main {
                     System.out.printf("A row echelon form of\n %s is: \n%s", m1, m1.getRowEchelon());
                     break;
                 case 4:
+                    m1 = getMatrixInput(1);
+                    System.out.printf("The transpose of matrix\n%s\n=\n%s", m1, m1.transpose());
+                    break;
+                case 5:
                     System.out.println("Exiting ...");
                     continue;
                 default:

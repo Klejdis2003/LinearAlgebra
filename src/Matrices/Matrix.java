@@ -203,7 +203,16 @@ public class Matrix {
         refMatrix.updateMatrix(matrix);
         return refMatrix;
     }
-
+    public Matrix transpose(){
+        Matrix transposedMatrix = new Matrix(columns, rows);
+        for (int i = 0; i < transposedMatrix.rows; i++) {
+            for (int j = 0; j < transposedMatrix.columns ; j++) {
+                transposedMatrix.matrix[i][j] = columnMap.get(i).get(j);
+            }
+        }
+        transposedMatrix.updateMatrix(transposedMatrix.matrix);
+        return transposedMatrix;
+    }
     @Override
     public boolean equals(Object matrix) {
 
